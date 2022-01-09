@@ -1,0 +1,54 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type UserDto {
+  _id: String!
+  firstName: String!
+  lastName: String!
+  dob: DateTime!
+  status: String!
+  email: String!
+  password: String!
+  is_block: Boolean!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Query {
+  users: [UserDto!]!
+  findUser(input: FindUserInput!): UserDto!
+}
+
+input FindUserInput {
+  _id: String!
+}
+
+type Mutation {
+  createUser(input: CreateUserInput!): UserDto!
+  updateUser(input: UpdateUserInput!): UserDto!
+}
+
+input CreateUserInput {
+  firstName: String!
+  lastName: String!
+  dob: DateTime!
+  status: String
+  email: String!
+  password: String!
+  is_block: Boolean!
+}
+
+input UpdateUserInput {
+  firstName: String!
+  lastName: String!
+  dob: DateTime!
+  status: String!
+  email: String!
+  password: String!
+  is_block: Boolean!
+  _id: String!
+}
