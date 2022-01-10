@@ -5,32 +5,32 @@ import { IsAlpha, IsEmail, IsInt, isInt, IsNotEmpty, IsString, Matches, min, Min
 
 @InputType()
 export class CreateUserInput {
-  @Field()
+  @Field({nullable:true})
   @IsNotEmpty()
   @IsString()
   @IsAlpha()
   firstName: string;
 
-  @Field()
+  @Field({nullable:true})
   @IsAlpha()
   lastName: string;
 
-  @Field()
+  @Field({nullable:true})
   dob: Date;
 
   @Field({nullable:true})
   status: string;
 
-  @Field()
+  @Field({nullable:true})
   @IsEmail()
   email: string;
 
   @MinLength( 8, { each: true } )
-  @Field()
+  @Field({nullable:true})
   @Matches('(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])')
   password: string;
 
-  @Field()
+  @Field({nullable:true})
   is_block: boolean;
 }
 

@@ -20,13 +20,18 @@ export class UserService {
     const password = createUser.password;
     const hash = await bcrypt.hash(password, saltOrRounds);
     console.log("hash is : ", hash)
-
     // const isMatch = await bcrypt.compare(password, hash);
-
     // console.log("compared password : ", isMatch)
-
     user.password = hash;
 
+    var currentDate = new Date();
+        var years = currentDate.getFullYear()
+        var dob = createUser.dob;
+        var year = dob.getFullYear()
+        const age = years - year;
+        user.age = age;
+
+        
     return user.save();
 
   }
@@ -51,4 +56,28 @@ export class UserService {
     return user.save();
   }
 
+  async activeUsers() : Promise<User[]>
+    {
+        return this.userModel.find({status : "active"})
+    }
+
+  async inActiveUsers() : Promise<User[]>
+    {
+        return this.userModel.find({status : "inactive"})
+    }
+  async blockedUsers() : Promise<User[]>
+    {
+        return this.userModel.find({isBlock : "true"})
+    }
+    async unblockedUsers() : Promise<User[]>
+    {
+        return this.userModel.find({isBlock : "false"})
+    }  
+
+    async blockUser(updateIsBlock : UpdateUserInput) : Promise<User>
+    {
+        const user = await this.userModel.findOne(new Types.ObjectId(updateIsBlock._id));
+        user.is_block = updateIsBlock.is_block
+        return user.save();
+    }
 }

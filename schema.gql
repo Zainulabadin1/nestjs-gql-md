@@ -7,6 +7,7 @@ type UserDto {
   firstName: String!
   lastName: String!
   dob: DateTime!
+  age: Float!
   status: String!
   email: String!
   password: String!
@@ -21,6 +22,10 @@ scalar DateTime
 type Query {
   users: [UserDto!]!
   findUser(input: FindUserInput!): UserDto!
+  activeUsers: [UserDto!]!
+  inActiveUsers: [UserDto!]!
+  blockedUsers: [UserDto!]!
+  unblockedUsers: [UserDto!]!
 }
 
 input FindUserInput {
@@ -30,25 +35,26 @@ input FindUserInput {
 type Mutation {
   createUser(input: CreateUserInput!): UserDto!
   updateUser(input: UpdateUserInput!): UserDto!
+  adminBlockUSer(input: UpdateUserInput!): UserDto!
 }
 
 input CreateUserInput {
-  firstName: String!
-  lastName: String!
-  dob: DateTime!
+  firstName: String
+  lastName: String
+  dob: DateTime
   status: String
-  email: String!
-  password: String!
-  is_block: Boolean!
+  email: String
+  password: String
+  is_block: Boolean
 }
 
 input UpdateUserInput {
-  firstName: String!
-  lastName: String!
-  dob: DateTime!
-  status: String!
-  email: String!
-  password: String!
-  is_block: Boolean!
-  _id: String!
+  firstName: String
+  lastName: String
+  dob: DateTime
+  status: String
+  email: String
+  password: String
+  is_block: Boolean
+  _id: String
 }

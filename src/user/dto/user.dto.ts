@@ -15,6 +15,9 @@ export class UserDto{
   dob: Date;
 
   @Field()
+  age: number;
+
+  @Field()
   status: string;
 
   @Field()

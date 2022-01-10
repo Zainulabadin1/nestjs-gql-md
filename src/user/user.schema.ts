@@ -15,6 +15,9 @@ export class User extends Document{
     @Prop()
     dob: Date
 
+    @Prop()
+    age: number
+
     @Prop({default : "inactive"})
     status: string
 
