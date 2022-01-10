@@ -4,6 +4,7 @@ import { Model, Types } from 'mongoose';
 import { CreateUserInput, FindUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User} from './user.schema';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -12,9 +13,22 @@ export class UserService {
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
 
-  create(createUser: CreateUserInput) : Promise<User> {
+   async create(createUser: CreateUserInput) : Promise<User> {
     const user = new this.userModel(createUser);
+
+    const saltOrRounds = 10;
+    const password = createUser.password;
+    const hash = await bcrypt.hash(password, saltOrRounds);
+    console.log("hash is : ", hash)
+
+    // const isMatch = await bcrypt.compare(password, hash);
+
+    // console.log("compared password : ", isMatch)
+
+    user.password = hash;
+
     return user.save();
+
   }
 
   findAll() : Promise <User[]> {
