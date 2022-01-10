@@ -10,6 +10,8 @@ import {UserModule} from './user/user.module';
 @Module({
   imports: [UserModule, GraphQLModule.forRoot({
     autoSchemaFile: 'schema.gql',
+    introspection: true,
+      playground: true
   }),
   MongooseModule.forRoot('mongodb+srv://zain9246:G9JVMPYMhQErVbh6@cluster0.32ag5.mongodb.net/nestjs-gql-md'),
 MongooseModule.forFeature([{
