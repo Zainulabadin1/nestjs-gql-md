@@ -4,7 +4,7 @@ import { User } from './entities/user.entity';
 import { CreateUserInput, FindUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { UserDto } from './dto/user.dto';
-
+ // typing for commit
 @Resolver()
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
