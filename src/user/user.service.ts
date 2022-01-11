@@ -54,19 +54,21 @@ export class UserService {
           });
         
           // send mail with defined transport object
-          try{
-            let info = await transporter.sendMail({
+          
+            transporter.sendMail({
               from: '"Fred Foo 👻" <mousajaved123@gmail.com>', // sender address
               to: user.email, // list of receivers
               subject: "Hello ✔", // Subject line
               text: "Please click to activate ", // plain text body
               html: "<b>Hello world?</b>", // html body
               URL : `http://www.facebook.com`
+            })
+            .then((success) => {
+              console.log(success);
+            })
+            .catch((err) => {
+              console.log(err);
             });
-          }catch{
-            console.log("some exception")
-
-          }
           
           
           console.log("email is : " , user.email)
