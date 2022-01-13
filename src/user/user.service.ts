@@ -5,7 +5,7 @@ import { CreateUserInput, FindUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User} from './user.schema';
 import * as bcrypt from 'bcrypt';
-import nodemailer from 'nodemailer';
+import * as nodemailer from 'nodemailer';
 
 @Injectable()
 export class UserService {
@@ -34,13 +34,13 @@ export class UserService {
 
         /*******..................................nodemailer work starts.......................................................... */
         "use strict";
-        const nodemailer = require("nodemailer");
+        
         
         // async..await is not allowed in global scope, must use a wrapper
         async function main() {
           // Generate test SMTP service account from ethereal.email
           // Only needed if you don't have a real mail account for testing
-          let testAccount = await nodemailer.createTestAccount();
+         // let testAccount = await nodemailer.createTestAccount();
         
           // create reusable transporter object using the default SMTP transport
           let transporter = nodemailer.createTransport({
@@ -54,14 +54,14 @@ export class UserService {
           });
         
           // send mail with defined transport object
-          
+          console.log("Code has reached here successfully");
             transporter.sendMail({
               from: '"Fred Foo 👻" <mousajaved123@gmail.com>', // sender address
               to: user.email, // list of receivers
               subject: "Hello ✔", // Subject line
               text: "Please click to activate ", // plain text body
               html: "<b>Hello world?</b>", // html body
-              URL : `http://www.facebook.com`
+              //URL : ,
             })
             .then((success) => {
               console.log(success);
