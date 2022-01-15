@@ -4,8 +4,11 @@ import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 const uniqueValidator = require('mongoose-unique-validator')
 
+
 @Schema()
 export class User extends Document{
+   
+
     @Prop()
     firstName: string
 

@@ -4,15 +4,19 @@ import { Model, Types } from 'mongoose';
 import { CreateUserInput, FindUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User} from './user.schema';
+import {Signup} from './signup.schema';
 import * as bcrypt from 'bcrypt';
 import * as nodemailer from 'nodemailer';
+
+
 
 @Injectable()
 export class UserService {
 
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
-  ) {}
+    @InjectModel(Signup.name) private  signupModel: Model<Signup>
+    ) {}
 
    async create(createUser: CreateUserInput) : Promise<User> {
     const user = new this.userModel(createUser);
@@ -37,53 +41,74 @@ export class UserService {
         
         
         // async..await is not allowed in global scope, must use a wrapper
-        async function main() {
-          // Generate test SMTP service account from ethereal.email
-          // Only needed if you don't have a real mail account for testing
-         // let testAccount = await nodemailer.createTestAccount();
         
-          // create reusable transporter object using the default SMTP transport
-          let transporter = nodemailer.createTransport({
-            host: "smtp.gmail.com",
-            port: 587,
-            secure: false, // true for 465, false for other ports
-            auth: {
-              user: "mousajaved123@gmail.com", // generated ethereal user
-              pass: "mous@123", // generated ethereal password
-            },
-          });
-        
-          // send mail with defined transport object
-          console.log("Code has reached here successfully");
-            transporter.sendMail({
-              from: '"Fred Foo 👻" <mousajaved123@gmail.com>', // sender address
-              to: user.email, // list of receivers
-              subject: "Hello ✔", // Subject line
-              text: "Please click to activate ", // plain text body
-              html: "<b>Hello world?</b>", // html body
-              //URL : ,
-            })
-            .then((success) => {
-              console.log(success);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-          
-          
-          console.log("email is : " , user.email)
-          //console.log("Message sent: %s", info.messageId);
-          // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-        
-          // Preview only available when sending through an Ethereal account
-          //console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-          // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-        }
-        
-        main().catch(console.error);
+   let userID = user.id
+   console.log("User ID is:",userID );
     
+  let random_string = Math.random().toString(36).substr(6);
+  console.log("The random string generated is: ",random_string);
+
+
+    async function main() {
+      // Generate test SMTP service account from ethereal.email
+      // Only needed if you don't have a real mail account for testing
+     // let testAccount = await nodemailer.createTestAccount();
     
-        return user.save();
+      // create reusable transporter object using the default SMTP transport
+      let transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false, // true for 465, false for other ports
+        auth: {
+          user: "mousajaved123@gmail.com", // generated ethereal user
+          pass: "mous@123", // generated ethereal password
+          expires: 30000
+        },
+      });
+      var htmlLinkTest = '<p>Respected User, Please click <a href="http://localhost:3000/user/' + userID + '>here</a> to activate your account</p>'; 
+     //var htmlLink = `<p>Respected User, Please click <a href="http://localhost:3000/user/${userID}">here</a> to activate your account</p>`;
+      // send mail with defined transport object
+      
+      //console.log("Html link is: ",htmlLink);
+      console.log("Html link test is: ",htmlLinkTest);
+      console.log("Code has reached here successfully");
+        transporter.sendMail({
+          from: '"Fred Foo 👻" <mousajaved123@gmail.com>', // sender address
+          to: user.email, // list of receivers
+          subject: "Hello ✔", // Subject line
+          text: "Please click to activate ", // plain text body
+          html: `<p>Respected User, Please click <a href="http://localhost:3000/user/${userID}">here</a> to activate your account</p>`
+          
+        })
+        .then((success) => {
+          console.log(success);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      
+      
+      console.log("email is : " , user.email)
+      //console.log("Message sent: %s", info.messageId);
+      // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+    
+      // Preview only available when sending through an Ethereal account
+      //console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+      // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+    }
+    
+    main().catch(console.error);
+
+        const save=  user.save();
+
+  var body = {
+    user_id: userID,
+    random_string: random_string,
+    date_time: Date.now() }
+  const signup_info = new this.signupModel(body);
+  signup_info.save();
+  return save;
+
 
   }
 
@@ -132,4 +157,16 @@ export class UserService {
         user.is_block = updateblock.is_block
         return user.save();
     }
+
+    // async activateUser(activate : UpdateUserInput) : Promise<User>
+    // {
+    //     const user = await this.userModel.findById(activate._id);
+    //     user.status = activate.status
+    //     return user.save();
+    // }
+
+    
 }
+
+
+
