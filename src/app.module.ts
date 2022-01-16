@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { User, UserSchema } from './user/entities/user.entity';
+import {Signup, SignupSchema} from './user/signup.schema';
 import {UserModule} from './user/user.module';
 
 
@@ -16,7 +17,8 @@ import {UserModule} from './user/user.module';
   MongooseModule.forRoot('mongodb+srv://zain9246:G9JVMPYMhQErVbh6@cluster0.32ag5.mongodb.net/nestjs-gql-md'),
 MongooseModule.forFeature([{
   name: User.name, schema: UserSchema
-}])
+}]),
+MongooseModule.forFeature([{name : Signup.name , schema : SignupSchema}])
 ],
   controllers: [AppController],
   providers: [AppService],

@@ -77,8 +77,8 @@ export class UserService {
           to: user.email, // list of receivers
           subject: "Hello ✔", // Subject line
           text: "Please click to activate ", // plain text body
-          html: `<p>Respected User, Please click <a href="http://localhost:3000/user/${userID}">here</a> to activate your account</p>`
-          
+          //html: `<p>Respected User, Please click <a href="http://localhost:3000/user/${userID}">here</a> to activate your account</p>`
+          html: `<p>Respected User, Please click <a href="http://localhost:3000/user/${random_string}">here</a> to activate your account</p>`
         })
         .then((success) => {
           console.log(success);
