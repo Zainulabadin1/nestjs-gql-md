@@ -24,7 +24,8 @@ export class User extends Document{
     @Prop({default : "inactive"})
     status: string
 
-    @Prop({unique : true})
+    @Prop()
+    //@Prop({unique : true})
     email: string
 
     @Prop()
@@ -35,6 +36,12 @@ export class User extends Document{
 
     @Prop({default: 0})
     counter: number
+
+    @Prop()
+    gender: string
+
+    @Prop()
+    nationality: string
 
 }
 

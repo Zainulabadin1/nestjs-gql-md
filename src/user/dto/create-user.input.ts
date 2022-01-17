@@ -32,6 +32,13 @@ export class CreateUserInput {
 
   @Field({nullable:true})
   is_block: boolean;
+
+  @Field({nullable:true})
+  gender: string
+
+
+  @Field({nullable:true})
+  nationality: string
 }
 
 @InputType()

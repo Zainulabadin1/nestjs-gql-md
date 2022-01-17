@@ -54,7 +54,7 @@ export class AppService {
 
     console.log("new time", dateDiff);
 
-    if (dateDiff<2){
+    if (dateDiff<1){
       console.log("your message is visible");
       console.log("User ID is:", user.user_id)
       const status = this.updateUser(user.user_id);       //function call to update user's status
@@ -65,14 +65,58 @@ export class AppService {
       //   return 'you have too many attempts.'
       // }
 
-      const randomStringSchema = await this.signupModel.find({user_id : user.user_id});
-      if(randomStringSchema.length>=3){
-        return 'you have too many attempts.'
+      /********* User who's female, Pakistioni national and age less than 30 - gets 5 chances */
+      if (userFromDb.gender === "female" && userFromDb.nationality === 'Pakistani' &&  userFromDb.age<30 && userFromDb.counter<=5 ){
+        this.incrementUserCounter(userFromDb.id)
+        this.sendEmail(userFromDb.id)                      //function call to resend randomly generated string
+        return 'Your activation time is exceeded, please check your inbox for a new link';
+
       }
-      this.incrementUserCounter(user.user_id)
-      this.sendEmail(user.user_id)                      //function call to resend randomly generated string
-      console.log("time limit exceeded, new link..");
-      return 'Your activation time is exceeded, please check your inbox for a new link';
+
+      /********* User who's male, Pakistioni national and age less than 20 - gets 6 chances */
+      else if (userFromDb.gender === "male" && userFromDb.nationality === 'Pakistani' &&  userFromDb.age<20 && userFromDb.counter<=6){
+        this.incrementUserCounter(userFromDb.id)
+        this.sendEmail(userFromDb.id)                      //function call to resend randomly generated string
+        return 'Your activation time is exceeded, please check your inbox for a new link';
+      }
+
+      /********* User who's female, American national and age less than 20 - gets 2 chances */
+      else if (userFromDb.gender === "female" && userFromDb.nationality === 'American' &&  userFromDb.age<20 && userFromDb.counter<=2){
+        this.incrementUserCounter(userFromDb.id)
+        this.sendEmail(userFromDb.id)                      //function call to resend randomly generated string
+        return 'Your activation time is exceeded, please check your inbox for a new link';
+      }
+
+
+      /********* User who's Pakistioni national and age greater than 50 - gets warning and counter reset*/
+      else if (userFromDb.nationality === 'Pakistani' &&  userFromDb.age>=50 && userFromDb.counter===3){
+        userFromDb.counter = 0;
+        userFromDb.save();
+        this.sendEmail(userFromDb.id)
+        return 'You have recahed limit for activating your profile, please note..';
+      }
+      
+
+      else if(userFromDb.counter<=4){
+        this.incrementUserCounter(userFromDb.id)
+        this.sendEmail(userFromDb.id)                      //function call to resend randomly generated string
+         return 'Your activation time is exceeded, please check your inbox for a new link';
+        }
+
+        else if(userFromDb.counter>=4) {
+          return 'You have too many attempts';
+        }
+      
+      
+      
+      //   const randomStringSchema = await this.signupModel.find({user_id : user.user_id});
+      // if(randomStringSchema.length>=3){
+      //   return 'you have too many attempts.'
+      // }
+      // this.incrementUserCounter(user.user_id)
+      // this.sendEmail(user.user_id)                      //function call to resend randomly generated string
+      // console.log("time limit exceeded, new link..");
+      // return 'Your activation time is exceeded, please check your inbox for a new link';
 
 
     }

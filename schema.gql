@@ -47,6 +47,8 @@ input CreateUserInput {
   email: String
   password: String
   is_block: Boolean
+  gender: String
+  nationality: String
 }
 
 input UpdateUserInput {
@@ -57,5 +59,7 @@ input UpdateUserInput {
   email: String
   password: String
   is_block: Boolean
+  gender: String
+  nationality: String
   _id: String
 }
