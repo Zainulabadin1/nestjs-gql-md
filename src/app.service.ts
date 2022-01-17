@@ -91,8 +91,7 @@ export class AppService {
 
       /********* User who's Pakistioni national and age greater than 50 - gets warning and counter reset*/
       else if (userFromDb.nationality === 'Pakistani' &&  userFromDb.age>=50 && randomStringOccurance.length===3){
-        userFromDb.counter = 0;
-        userFromDb.save();
+        
         this.sendEmail(userFromDb.id)
         return 'You have recahed limit for activating your profile, please note..';
       }
@@ -172,7 +171,7 @@ async sendEmail(userId){
 async incrementUserCounter(userId){
 
   const user = await this.userModel.findById(userId);
-  user.counter ++;
+  //user.counter ++;
   user.save();
 }
 

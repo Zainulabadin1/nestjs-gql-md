@@ -34,8 +34,6 @@ export class User extends Document{
     @Prop()
     is_block: boolean
 
-    @Prop({default: 0})
-    counter: number
 
     @Prop()
     gender: string
