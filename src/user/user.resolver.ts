@@ -62,9 +62,9 @@ export class UserResolver {
         return this.userService.blockUser(input);
     }
 
-    // @Mutation(() => UserDto)
-    // async userStatus(@Args('input') input : UpdateUserInput)
-    // {
-    //     return this.userService.activateUser(input);
-    // }
+    @Mutation(() => UserDto)
+    async userStatus(@Args('input') input : UpdateUserInput)
+    {
+        return this.userService.activateUser(input);
+    }
 }

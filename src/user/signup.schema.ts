@@ -16,6 +16,7 @@ export class Signup extends Document{
     @Prop()
     date_time: Date
 
+   
 }
 
 export const SignupSchema = SchemaFactory.createForClass(Signup);

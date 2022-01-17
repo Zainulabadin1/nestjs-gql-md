@@ -36,6 +36,7 @@ type Mutation {
   createUser(input: CreateUserInput!): UserDto!
   updateUser(input: UpdateUserInput!): UserDto!
   adminBlockUSer(input: UpdateUserInput!): UserDto!
+  userStatus(input: UpdateUserInput!): UserDto!
 }
 
 input CreateUserInput {

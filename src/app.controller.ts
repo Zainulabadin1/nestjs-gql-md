@@ -13,6 +13,7 @@ export class AppController {
     return this.appService.getHello();
   }
 
+  /*************When UserID was sent through email on signup */
   // @Get('/user/:id')
   // updateUser(@Param('id') id : string): Promise<User>{
   //   return this.appService.updateUserStatus(id);

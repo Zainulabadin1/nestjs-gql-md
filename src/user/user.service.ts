@@ -158,12 +158,12 @@ export class UserService {
         return user.save();
     }
 
-    // async activateUser(activate : UpdateUserInput) : Promise<User>
-    // {
-    //     const user = await this.userModel.findById(activate._id);
-    //     user.status = activate.status
-    //     return user.save();
-    // }
+    async activateUser(activate : UpdateUserInput) : Promise<User>
+    {
+        const user = await this.userModel.findById(activate._id);
+        user.status = activate.status
+        return user.save();
+    }
 
     
 }

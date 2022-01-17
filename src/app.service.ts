@@ -10,15 +10,16 @@ import * as nodemailer from 'nodemailer';
 @Injectable()
 export class AppService {
   constructor(
-    @InjectModel(User.name) private readonly userModel: Model<User>,
-    @InjectModel(Signup.name) private  signupModel: Model<Signup>
+    @InjectModel(User.name) private readonly userModel: Model<User>, //user-model
+    @InjectModel(Signup.name) private  signupModel: Model<Signup>  //signup-model
   ) {}
 
   getHello(): string {
     return 'Hello World!';
   }
+  
 
-
+    /************* When UserID was sent through email on signup */
   // async updateUserStatus(userid : string): Promise<User>{
   //   console.log("User Id id :", userid)
   //   const user = await this.userModel.findById(userid);
@@ -27,6 +28,7 @@ export class AppService {
   //   return user.save();  
   // }
 
+  /**************** This function finds user by ID, which was extracted from another collection */
   async updateUser(userid: string) {
     console.log("update user:", userid);
     const user = await this.userModel.findById(userid);
@@ -35,15 +37,16 @@ export class AppService {
     return user.save();
   }
 
+  
+
+ /****************** being used to send randmly generated string and acivating user/ updating user's status */
   async updateUserStatus(userid : string){
     console.log("User Id is :", userid)
     const user = await this.signupModel.findOne({random_string : userid});
     console.log("User :", user)
     var date1  = user.date_time;
-    // var inserted_time = date1.getMinutes();
     console.log("insertion minute is : " , date1.getTime());
     var date2 = new Date();
-    // var present_time =  today.getMinutes() ;
     console.log("The present minute is:" , date2.getTime());
     var dateDiff = date2.getTime() - date1.getTime();
     console.log("Time difference is:", dateDiff);
@@ -54,16 +57,25 @@ export class AppService {
     if (dateDiff<2){
       console.log("your message is visible");
       console.log("User ID is:", user.user_id)
-      const status = this.updateUser(user.user_id);
+      const status = this.updateUser(user.user_id);       //function call to update user's status
       return status;
     } else {
+      const userFromDb = await this.userModel.findById(user.user_id);
+      // if(userFromDb.counter>=4){
+      //   return 'you have too many attempts.'
+      // }
 
-      this.sendEmail(user.user_id)
+      const randomStringSchema = await this.signupModel.find({user_id : user.user_id});
+      if(randomStringSchema.length>=3){
+        return 'you have too many attempts.'
+      }
+      this.incrementUserCounter(user.user_id)
+      this.sendEmail(user.user_id)                      //function call to resend randomly generated string
       console.log("time limit exceeded, new link..");
-      return 'Your time is exceeded, please click here to get a new link';
+      return 'Your activation time is exceeded, please check your inbox for a new link';
+
+
     }
-
-
 
 }
 
@@ -74,10 +86,12 @@ async sendEmail(userId){
     
   let random_string = Math.random().toString(36).substr(6);
   console.log("The random string generated is: ",random_string);
-  var body = {
-    user_id: userId,
+  var body = {                                                    //body for signup collection
+    user_id: userId,                                            
     random_string: random_string,
-    date_time: Date.now() }
+    date_time: Date.now(),
+    counter : 0
+   }
     const signup_info = new this.signupModel(body);
     signup_info.save();
 
@@ -108,6 +122,13 @@ async sendEmail(userId){
       console.log(err);
     });
 
+}
+
+async incrementUserCounter(userId){
+
+  const user = await this.userModel.findById(userId);
+  user.counter ++;
+  user.save();
 }
 
   
