@@ -54,7 +54,7 @@ export class AppService {
 
     console.log("new time", dateDiff);
 
-    if (dateDiff<1){
+    if (dateDiff<0.5){
       console.log("your message is visible");
       console.log("User ID is:", user.user_id)
       const status = this.updateUser(user.user_id);       //function call to update user's status
@@ -64,24 +64,25 @@ export class AppService {
       // if(userFromDb.counter>=4){
       //   return 'you have too many attempts.'
       // }
+      const randomStringOccurance = await this.signupModel.find({user_id : user.user_id});
 
       /********* User who's female, Pakistioni national and age less than 30 - gets 5 chances */
-      if (userFromDb.gender === "female" && userFromDb.nationality === 'Pakistani' &&  userFromDb.age<30 && userFromDb.counter<=5 ){
+      if (userFromDb.gender === "female" && userFromDb.nationality === 'Pakistani' &&  userFromDb.age<30 && randomStringOccurance.length<=5 ){
         this.incrementUserCounter(userFromDb.id)
         this.sendEmail(userFromDb.id)                      //function call to resend randomly generated string
         return 'Your activation time is exceeded, please check your inbox for a new link';
 
       }
-
+     
       /********* User who's male, Pakistioni national and age less than 20 - gets 6 chances */
-      else if (userFromDb.gender === "male" && userFromDb.nationality === 'Pakistani' &&  userFromDb.age<20 && userFromDb.counter<=6){
+      else if (userFromDb.gender === "male" && userFromDb.nationality === 'Pakistani' &&  userFromDb.age<20 && randomStringOccurance.length<=6){
         this.incrementUserCounter(userFromDb.id)
         this.sendEmail(userFromDb.id)                      //function call to resend randomly generated string
         return 'Your activation time is exceeded, please check your inbox for a new link';
       }
 
       /********* User who's female, American national and age less than 20 - gets 2 chances */
-      else if (userFromDb.gender === "female" && userFromDb.nationality === 'American' &&  userFromDb.age<20 && userFromDb.counter<=2){
+      else if (userFromDb.gender === "female" && userFromDb.nationality === 'American' &&  userFromDb.age<20 && randomStringOccurance.length<=2){
         this.incrementUserCounter(userFromDb.id)
         this.sendEmail(userFromDb.id)                      //function call to resend randomly generated string
         return 'Your activation time is exceeded, please check your inbox for a new link';
@@ -89,7 +90,7 @@ export class AppService {
 
 
       /********* User who's Pakistioni national and age greater than 50 - gets warning and counter reset*/
-      else if (userFromDb.nationality === 'Pakistani' &&  userFromDb.age>=50 && userFromDb.counter===3){
+      else if (userFromDb.nationality === 'Pakistani' &&  userFromDb.age>=50 && randomStringOccurance.length===3){
         userFromDb.counter = 0;
         userFromDb.save();
         this.sendEmail(userFromDb.id)
@@ -97,16 +98,16 @@ export class AppService {
       }
       
 
-      else if(userFromDb.counter<=4){
+      else if(randomStringOccurance.length<=4){
         this.incrementUserCounter(userFromDb.id)
         this.sendEmail(userFromDb.id)                      //function call to resend randomly generated string
          return 'Your activation time is exceeded, please check your inbox for a new link';
         }
 
-        else if(userFromDb.counter>=4) {
+        else if(randomStringOccurance.length>=5) {
           return 'You have too many attempts';
         }
-      
+        
       
       
       //   const randomStringSchema = await this.signupModel.find({user_id : user.user_id});
@@ -145,8 +146,8 @@ async sendEmail(userId){
     port: 587,
     secure: false, 
     auth: {
-      user: "mousajaved123@gmail.com", // generated ethereal user
-      pass: "mous@123", // generated ethereal password
+      user: "insightsquare59@gmail.com", // generated ethereal user
+      pass: "insight@123", // generated ethereal password
       expires: 30000
     },
   });

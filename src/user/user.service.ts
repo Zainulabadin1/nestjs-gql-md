@@ -60,8 +60,8 @@ export class UserService {
         port: 587,
         secure: false, // true for 465, false for other ports
         auth: {
-          user: "mousajaved123@gmail.com", // generated ethereal user
-          pass: "mous@123", // generated ethereal password
+          user: "insightsquare59@gmail.com", // generated ethereal user
+          pass: "insight@123", // generated ethereal password
           expires: 30000
         },
       });
