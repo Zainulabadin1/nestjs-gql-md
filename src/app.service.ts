@@ -64,7 +64,7 @@ export class AppService {
       // if(userFromDb.counter>=4){
       //   return 'you have too many attempts.'
       // }
-      const randomStringOccurance = await this.signupModel.find({user_id : user.user_id});
+      var randomStringOccurance = await this.signupModel.find({user_id : user.user_id});
 
       /********* User who's female, Pakistioni national and age less than 30 - gets 5 chances */
       if (userFromDb.gender === "female" && userFromDb.nationality === 'Pakistani' &&  userFromDb.age<30 && randomStringOccurance.length<=5 ){
@@ -91,7 +91,8 @@ export class AppService {
 
       /********* User who's Pakistioni national and age greater than 50 - gets warning and counter reset*/
       else if (userFromDb.nationality === 'Pakistani' &&  userFromDb.age>=50 && randomStringOccurance.length===3){
-        
+        randomStringOccurance = [];
+        console.log("arrrrr....")
         this.sendEmail(userFromDb.id)
         return 'You have recahed limit for activating your profile, please note..';
       }
