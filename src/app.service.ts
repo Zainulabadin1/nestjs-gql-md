@@ -71,7 +71,7 @@ export class AppService {
         this.incrementUserCounter(userFromDb.id)
         this.sendEmail(userFromDb.id)                      //function call to resend randomly generated string
         return 'Your activation time is exceeded, please check your inbox for a new link';
-
+ 
       }
      
       /********* User who's male, Pakistioni national and age less than 20 - gets 6 chances */
@@ -89,22 +89,16 @@ export class AppService {
       }
 
 
-      /********* User who's Pakistioni national and age greater than 50 - gets warning and counter reset*/
+      /********* User who's Pakistani national and age greater than 50 - gets warning and counter reset*/
       else if (userFromDb.nationality === 'Pakistani' &&  userFromDb.age>=50 && randomStringOccurance.length===2){
-        
-        randomStringOccurance.forEach(element => {
-          this.signupModel.findByIdAndRemove(element.id)
+        randomStringOccurance.forEach(async element => {
+        console.log("element ID stored here",element._id )
+         await this.signupModel.findByIdAndDelete(element._id);
         });
         
-        //this.signupModel.update({id: randomStringOccurance},{$pullAll:{}})
-        // var iDOccurance = await this.signupModel.find({user_id : user.user_id});
-        // if (iDOccurance.length<=4){
-        // randomStringOccurance = [];
         this.sendEmail(userFromDb.id)
         return 'You have reached limit for activating your profile, please note..';
       }
-      //   return 'You have reached limit for activating your profile, please contact administrator';
-      // }
       
 
       else if(randomStringOccurance.length<=4){
