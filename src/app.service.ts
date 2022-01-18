@@ -39,7 +39,7 @@ export class AppService {
 
   
 
- /****************** being used to send randmly generated string and acivating user/ updating user's status */
+ /****************** being used to send randmly generated string and activating user/ updating user's status */
   async updateUserStatus(userid : string){
     console.log("User Id is :", userid)
     const user = await this.signupModel.findOne({random_string : userid});
@@ -90,12 +90,21 @@ export class AppService {
 
 
       /********* User who's Pakistioni national and age greater than 50 - gets warning and counter reset*/
-      else if (userFromDb.nationality === 'Pakistani' &&  userFromDb.age>=50 && randomStringOccurance.length===3){
-        randomStringOccurance = [];
-        console.log("arrrrr....")
+      else if (userFromDb.nationality === 'Pakistani' &&  userFromDb.age>=50 && randomStringOccurance.length===2){
+        
+        randomStringOccurance.forEach(element => {
+          this.signupModel.findByIdAndRemove(element.id)
+        });
+        
+        //this.signupModel.update({id: randomStringOccurance},{$pullAll:{}})
+        // var iDOccurance = await this.signupModel.find({user_id : user.user_id});
+        // if (iDOccurance.length<=4){
+        // randomStringOccurance = [];
         this.sendEmail(userFromDb.id)
-        return 'You have recahed limit for activating your profile, please note..';
+        return 'You have reached limit for activating your profile, please note..';
       }
+      //   return 'You have reached limit for activating your profile, please contact administrator';
+      // }
       
 
       else if(randomStringOccurance.length<=4){

@@ -24,8 +24,8 @@ export class User extends Document{
     @Prop({default : "inactive"})
     status: string
 
-    @Prop()
-    //@Prop({unique : true})
+    
+    @Prop({unique : true})
     email: string
 
     @Prop()
