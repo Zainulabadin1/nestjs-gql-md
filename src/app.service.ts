@@ -90,26 +90,30 @@ export class AppService {
 
 
       /********* User who's Pakistani national and age greater than 50 - gets warning and counter reset*/
-      else if (userFromDb.nationality === 'Pakistani' &&  userFromDb.age>=50 && randomStringOccurance.length===2){
+      else if (userFromDb.nationality === 'Pakistani' &&  userFromDb.age>=50 && randomStringOccurance.length>2){
+        while (randomStringOccurance.length>=4){
         randomStringOccurance.forEach(async element => {
         console.log("element ID stored here",element._id )
          await this.signupModel.findByIdAndDelete(element._id);
-        });
+         userFromDb.is_block = true;
+         userFromDb.save();
+          }) ;
+          return 'you are permanently blocked'};
         
         this.sendEmail(userFromDb.id)
         return 'You have reached limit for activating your profile, please note..';
       }
       
 
-      else if(randomStringOccurance.length<=4){
+      else if(randomStringOccurance.length<=2){
         this.incrementUserCounter(userFromDb.id)
         this.sendEmail(userFromDb.id)                      //function call to resend randomly generated string
          return 'Your activation time is exceeded, please check your inbox for a new link';
         }
 
-        else if(randomStringOccurance.length>=5) {
-          return 'You have too many attempts';
-        }
+      //   else if(randomStringOccurance.length>=5) {
+      //     return 'You have too many attempts';
+      //   }
         
       
       
@@ -149,7 +153,7 @@ async sendEmail(userId){
     port: 587,
     secure: false, 
     auth: {
-      user: "insightsquare59@gmail.com", // generated ethereal user
+      user: "insights829@gmail.com", // generated ethereal user
       pass: "insight@123", // generated ethereal password
       expires: 30000
     },
